@@ -126,18 +126,20 @@ def plot_surface(sigma,mu):
     plt.show()
 
 
-
-
-
 def plot_contour(sigma,mu,prior):
-    def g1(x, y):
-        probs=np.log(prior[0])+compute_log_likelihood_optim(X=np.column_stack((x, y)), mu=mu[0], sigma=sigma[0])
-        return np.array(probs)
+    '''
+    Plotting the contour and the decision boundary of both classes
 
-    def g2(x, y):
-        probs=np.log(prior[1])+compute_log_likelihood_optim(X=np.column_stack((x, y)), mu=mu[1], sigma=sigma[1])
-        return np.array(probs)
+    :param sigma: covariance matrix
+    :param mu: array with mean of each dimension
+    :param prior: array with the prior of each class
+    :return:
+    '''
 
+    # log-posterior/classifier
+    def g(x, y,idx_class):
+        probs=np.log(prior[idx_class])+compute_log_likelihood_optim(X=np.column_stack((x, y)), mu=mu[idx_class], sigma=sigma[idx_class])
+        return np.array(probs)
 
     x = np.linspace(-10, 10, 500)
     y = np.linspace(-10, 10, 500)
@@ -155,7 +157,7 @@ def plot_contour(sigma,mu,prior):
     ax0.contour(X, Y, rv4.reshape(500, 500), 20, cmap='BrBG')
     x=X.flatten()
     y=Y.flatten()
-    p = (g1(x, y) - g2(x, y)).reshape(X.shape)
+    p = (g(x, y, idx_class=0) - g(x, y, idx_class=1)).reshape(X.shape)
 
     #scatter class 1
     ax0.scatter(data_c1[:,0], data_c1[:, 1],c="red")
@@ -169,6 +171,7 @@ def plot_contour(sigma,mu,prior):
 
 def compute_prior(Y):
     '''
+    Computing the prior for each class
 
     :param Y: computing the labels by counting the number of data points for each class
             and dividing it by the sum of all data points

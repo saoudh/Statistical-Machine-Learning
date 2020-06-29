@@ -69,7 +69,13 @@ def gaussian_density_optim(X, mu, sigma):
     '''
 
     # dimension of x
-    d = sigma.shape[0]
+    if type(sigma) is np.ndarray:
+        d = sigma.shape[0]
+    else:
+        sigma=np.array([sigma])
+        d=1
+    if type(mu) is not np.ndarray:
+        mu=np.array([mu])
 
     # defining last part of the equation
     eq=np.exp(-0.5 * np.sum((X - mu) ** 2 / np.diag(sigma), axis=1))

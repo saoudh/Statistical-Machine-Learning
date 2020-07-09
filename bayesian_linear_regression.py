@@ -1,6 +1,6 @@
 import numpy as np
 from utils.utils import read_data_from_txt
-import view.visualize_curves as v
+import view.visualize as v
 
 
 def compute_rmse(Y, Y_pred):

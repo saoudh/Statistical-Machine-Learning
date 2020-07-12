@@ -44,3 +44,35 @@ def create_subplot_predictive_distributions_uncertainty(data_true_full, data_tru
     ax.set_title(fig_subtitle,fontsize="medium")
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
+
+
+def plot_lda_classification(data,y_true,y_pred,y_pred2):
+    fig, ax=plt.subplots(nrows=3,ncols=1)
+    plt.subplots_adjust(hspace=1.0)
+
+    label_dict = {0: 'Class 1', 1: 'Class 2', 2: 'Class 3'}
+    colors=["red","green","blue","yellow","black","gray"]
+    labels=["true data","predicted data","p2"]
+
+    # plot 2 subplots with true labels and predictions
+    for i,(y,title) in enumerate(zip([y_true,y_pred,y_pred2],labels)):
+        for label,color in zip(range(0,3),colors):
+            ax[i].scatter(x=data[:, 0].real[y == label],
+                        y=data[:, 1].real[y == label],
+                        color=color,
+                        alpha=0.5,
+                        label=label_dict[label]
+                        )
+            # hide grid lines
+            ax[i].grid(b=False)
+            ax[i].set_title(title, fontsize="medium")
+            ax[i].set_xlabel("x")
+            ax[i].set_ylabel("y")
+
+
+
+    leg = plt.legend(loc='best', fancybox=True)
+    leg.get_frame().set_alpha(0.5)
+    fig.suptitle('LDA-Classification with 3 classes')
+
+    plt.show()

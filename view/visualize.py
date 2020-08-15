@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import style
 style.use('fivethirtyeight')
-from utils.utils import gaussian_density_optim
 
 
 def plot_rmse(X,fig_title,fig_subtitle,**args):
@@ -47,7 +46,9 @@ def create_subplot_predictive_distributions_uncertainty(data_true_full, data_tru
 
 
 def plot_lda_classification(data,y_true,y_pred,y_pred2):
-    fig, ax=plt.subplots(nrows=3,ncols=1)
+    nrows=2
+    ncols=2
+    fig, ax=plt.subplots(nrows=nrows,ncols=ncols)
     plt.subplots_adjust(hspace=1.0)
 
     label_dict = {0: 'Class 1', 1: 'Class 2', 2: 'Class 3'}
@@ -57,21 +58,32 @@ def plot_lda_classification(data,y_true,y_pred,y_pred2):
     # plot 2 subplots with true labels and predictions
     for i,(y,title) in enumerate(zip([y_true,y_pred,y_pred2],labels)):
         for label,color in zip(range(0,3),colors):
-            ax[i].scatter(x=data[:, 0].real[y == label],
+            # compute current row and column index of the subplot
+            row_idx = int(abs(i / ncols))
+            col_idx = i % 2
+            ax[row_idx,col_idx].scatter(x=data[:, 0].real[y == label],
                         y=data[:, 1].real[y == label],
                         color=color,
                         alpha=0.5,
                         label=label_dict[label]
                         )
             # hide grid lines
-            ax[i].grid(b=False)
-            ax[i].set_title(title, fontsize="medium")
-            ax[i].set_xlabel("x")
-            ax[i].set_ylabel("y")
+            ax[row_idx,col_idx].grid(b=False)
+            ax[row_idx,col_idx].set_title(title, fontsize="medium")
+            ax[row_idx,col_idx].set_xlabel("x")
+            ax[row_idx,col_idx].set_ylabel("y")
+            ax[row_idx,col_idx].set_aspect('equal', adjustable='box')
 
+    # compute index of last row and column to delete it
+    row_idx =1# int(abs(len(n_data) / ncols))
+    col_idx = 1# len(n_data) % 2
+    # delete last odd axis to put the legend there
+    fig.delaxes(ax[row_idx, col_idx])
 
+    # apply legend and plot
+    leg=plt.legend(loc="best", bbox_to_anchor=(1.35, 1.2))
 
-    leg = plt.legend(loc='best', fancybox=True)
+    #leg = plt.legend(loc='best', fancybox=True)
     leg.get_frame().set_alpha(0.5)
     fig.suptitle('LDA-Classification with 3 classes')
 

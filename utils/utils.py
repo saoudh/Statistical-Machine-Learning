@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def read_data_from_txt(path, dim):
+def read_data_from_txt(path, dim, delimiter=None):
     '''
     reading data of indicated dimension
 
@@ -9,10 +9,10 @@ def read_data_from_txt(path, dim):
     :param dim: dimension of the matrix in the txt-file
     :return: numpy array containing all data points
     '''
-    with open(path, "r") as f:
-        data = f.read()
 
-    return np.array(data.split(), dtype=np.float32).reshape(dim)
+    return np.genfromtxt(path, dtype=np.float32, delimiter=delimiter).reshape(dim)
+
+    #return np.array(data.split(), dtype=np.float32).reshape(dim)
 
 def gaussian_density(x, mu, sigma):
     '''

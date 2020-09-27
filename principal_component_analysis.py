@@ -81,4 +81,11 @@ for i in range(1, 5):
 
     # computing NRMSE
     nrmse = np.sqrt(np.mean(X_norm - X_reconstr, 0) ** 2 / np.mean(X, 0) ** 2)
-    print("i=", i, " - nrmse=", nrmse)
+    if i==1:
+        print("NRMSE by using different number of principal components:")
+        print("#comp |      x₁     |      x₂     |      x₃     |      x₄      ")
+        print("_______________________________________________________________")
+    print("   ",i,"|   ", np.format_float_scientific(nrmse[0], unique=False, precision=2),"|",
+          np.format_float_scientific(nrmse[1], unique=False, precision=2),"   |",
+          np.format_float_scientific(nrmse[2], unique=False, precision=2),"   |",
+          np.format_float_scientific(nrmse[3], unique=False, precision=2))

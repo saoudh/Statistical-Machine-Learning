@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def read_data_from_txt(path, dim, delimiter=None):
+def read_data_from_txt(path, dim=None, delimiter=None):
     '''
     reading data of indicated dimension
 
@@ -10,7 +10,10 @@ def read_data_from_txt(path, dim, delimiter=None):
     :return: numpy array containing all data points
     '''
 
-    return np.genfromtxt(path, dtype=np.float32, delimiter=delimiter).reshape(dim)
+    arr=np.genfromtxt(path, dtype=np.float32, delimiter=delimiter)
+    if dim:
+        arr=arr.reshape(dim)
+    return arr
 
     #return np.array(data.split(), dtype=np.float32).reshape(dim)
 
@@ -83,3 +86,25 @@ def gaussian_density_optim(X, mu, sigma):
     p = 1 / ((2 * np.pi) ** (d / 2) * np.prod(np.sqrt(np.diag(sigma)))) *eq
 
     return p
+
+
+def init_weights_by_He(input_dim, output_dim):
+    '''
+    usable for ReLu activation functions
+
+    :param input_dim:
+    :param output_dim:
+    :return:
+    '''
+    W=np.random.normal(loc=0,scale=np.sqrt(2 / (input_dim)),size=(input_dim,output_dim))#uniform(input_dim, output_dim, (input_dim, output_dim)) * np.sqrt(1 / input_dim)
+    return W
+
+def init_weights_by_Xavier(input_dim, output_dim):
+    '''
+    usable for softmax, tanh, sigmoid activation functions
+    :param input_dim:
+    :param output_dim:
+    :return:
+    '''
+    W=np.random.normal(loc=0,scale=np.sqrt(1 / (input_dim)),size=(input_dim,output_dim))#uniform(input_dim, output_dim, (input_dim, output_dim)) * np.sqrt(1 / input_dim)
+    return W
